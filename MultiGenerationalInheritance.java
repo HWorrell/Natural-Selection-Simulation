@@ -8,6 +8,12 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+This program simulates a series of generations of individuals, some carrying the Allele for Sickle-Cell, some not.
+
+The program asks 7-8 questions to determine the parameters to be used in the simulation, then runs.
+
+On termination of the run, a report is generated, allowing in-depth comparison between generations.
+
  */
 
 import javax.swing.*;
@@ -215,6 +221,29 @@ class MultiGenerationalInheritance{
             }
 
         }
+
+        try {
+            PrintWriter output = new PrintWriter(new File(fileName + ".txt"));
+
+            output.println("Settings used:\n");
+            output.println("Chance of sickle allele: " + initialRateofSickleCell);
+            output.println("Chance of death for Homo-Nonsickle: " + chanceofDeathFromMalaria);
+            output.println("Chance of death for sickle-cell heterozygous: " + chanceOfDeathFromSickleCell);
+            output.println("\n");
+            output.println("Generational Data:");
+
+            for(int j = 0; j < generationLog.size(); j++){
+                output.println(generationLog.elementAt(j));
+                output.println("\n");
+            }
+            output.println("The human race is extinct after " + (generations.length) + " generations");
+            output.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.exit(0);
+
     }
 
 }
