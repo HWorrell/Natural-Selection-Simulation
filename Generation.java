@@ -10,6 +10,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
  */
 
+import java.util.Collections;
 import java.util.Random;
 import java.util.Stack;
 import java.util.Vector;
@@ -40,6 +41,9 @@ class Generation {
         int numMales = prev.getNumMales();
 
         int numFemales = prev.getNumFemales();
+        
+        Collections.shuffle(prev.population);
+
 
         if(numMales > numFemales){
             numCouples = numFemales;
