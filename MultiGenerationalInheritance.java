@@ -54,12 +54,8 @@ class MultiGenerationalInheritance{
 
         boolean malariaPresent;
 
-        if(input.equalsIgnoreCase("yes")){
-            malariaPresent = true;
-        }
-        else {
-            malariaPresent = false;  //is malaria present
-        }
+        //is malaria present
+        malariaPresent = input.equalsIgnoreCase("yes");
 
         input = JOptionPane.showInputDialog("Please enter the chance of death from Sickle Cell for a Heterozygous carrier.\nPlease enter it as an integer.");
 
@@ -115,7 +111,7 @@ class MultiGenerationalInheritance{
         //System.out.println("Generation 1 has " + generations[0].getNumFemales() + " Living females");
 
         //System.out.println("Generation 1 has " + generations[0].getTotalDeaths() + " Deaths, " + generations[0].getDeathsFromSickle()
-               // + " From sickle cell, and " + generations[0].getDeathsFromMalaria() + " From malaria");
+        // + " From sickle cell, and " + generations[0].getDeathsFromMalaria() + " From malaria");
 
         //System.out.println("Generation 1 has " + 100 * percentCarriers[0] + " percent of population with sickle gene\n\n");
 
@@ -124,7 +120,8 @@ class MultiGenerationalInheritance{
 
             percentCarriers[i] = generations[i].percentOfPopulationWithSickleGene();
 
-            generationLog.add("Generation " + (i + 1) + " has " + generations[i].getNumMales() + " Living " +
+            generationLog.add("Generation " + (i + 1) + " had " + generations[i].getTotalPopulation() + " born into it.\n" +
+                    "Generation " + (i + 1) + " has " + generations[i].getNumMales() + " Living " +
                     "males\n" + "Generation " + (i + 1) + " has " + generations[i].getNumFemales() + " Living females\n" +
                     "Generation " + (i + 1) + " has " + generations[i].getTotalDeaths() + " Deaths, " + generations[i].getDeathsFromSickle() +
                     " From sickle cell, and " + generations[i].getDeathsFromMalaria() + " From malaria\n" +
@@ -162,7 +159,7 @@ class MultiGenerationalInheritance{
             //System.out.println("Generation " + (i + 1) + " has " + generations[i].getNumFemales() + " Living females");
 
             //System.out.println("Generation " + (i + 1) + " has " + generations[i].getTotalDeaths() + " Deaths, " + generations[i].getDeathsFromSickle()
-                    //+ " From sickle cell, and " + generations[i].getDeathsFromMalaria() + " From malaria");
+            //+ " From sickle cell, and " + generations[i].getDeathsFromMalaria() + " From malaria");
 
             //System.out.println("Generation " + (i + 1) + " has " + 100 * percentCarriers[i] + " percent of population with sickle gene\n\n");
 
@@ -242,7 +239,7 @@ class MultiGenerationalInheritance{
                 output.println(generationLog.elementAt(j));
                 output.println("\n");
             }
-            output.println("The human race is extinct after " + (generations.length) + " generations");
+            //output.println("The human race is extinct after " + (generations.length) + " generations");
             output.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
