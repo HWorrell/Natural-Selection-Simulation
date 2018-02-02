@@ -61,37 +61,20 @@ class Generation {
             }
         }
 
-        //System.out.println("Females in stack: " + females.size());
-/*
-        index = 0;
-        while(males.size() < numCouples){
-            if(prev.population.elementAt(index).isAlive() && prev.population.elementAt(index).isMale()){
-                males.push(prev.population.elementAt(index));
-                prev.population.remove(index);
-            }
-            else{
-                index++;
-            }
-        }
-*/
-        //System.out.println("Males in stack: " + males.size());
-
-        int numChilren;
+        int numChildren;
         //int tally = 0;
 
         for(int i = 0; i < numCouples; i++){
-            numChilren = (int)((maxNumChildren + 1) * rand.nextDouble());
-            for(int j = 0; j < numChilren; j++){
+            numChildren = (int)((maxNumChildren + 1) * rand.nextDouble());
+            for(int j = 0; j < numChildren; j++){
                 population.add(new Person(males.peek(), females.peek()));
                 if(malaria) {
                     population.lastElement().malariaCheck();
                 }
-                //tally++;
             }
             males.pop();
             females.pop();
         }
-        //System.out.println("Total: " + tally);
 
     }
 

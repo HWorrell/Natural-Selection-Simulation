@@ -14,9 +14,6 @@ class Person{
     private boolean alive;
     private boolean diedfromsickle;
     private boolean diedfrommalaria;
-    //private static final double chanceOfDeathFromSickleCell = .25;//chance that a heterozygous sickle carrier will die
-    //private static final double initialRateofSickleCell = .10;//rate of sickle cell in initial population.  On a per-allele basis
-    //private static final double chanceofDeathFromMalaria = .5;//chance for a non-sickle to die from malaria.  Chance for hetere is .25 this rate
 
     Person(){
         Random rand = new Random();
@@ -61,14 +58,7 @@ class Person{
             this.diedfrommalaria = false;
         }
     }
-
-    /*
-    Person(String s, String a1, String a2){
-        this.sex = s;
-        this.alleleOne = a1;
-        this.alleleTwo = a2;
-    }
-    */
+    
 
     Person(Person f, Person m){
         Random rand = new Random();

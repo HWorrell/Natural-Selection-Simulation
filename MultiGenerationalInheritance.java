@@ -42,48 +42,51 @@ class MultiGenerationalInheritance{
 
         fileName = JOptionPane.showInputDialog("Please enter a file name for this run to be saved under.\nIt will be saved as <your_entry>.txt");
 
-        input = JOptionPane.showInputDialog("Please enter a size for the initial generation:");
+        if (fileName == null) {
+            shutdownWithError("There was an error in choosing a file name. The program will exit.");
+        }
 
-        int sizeOfInitialGeneration = Integer.parseInt(input);  //size of first generation.  Subsequent generations based on number of children
+        int sizeOfInitialGeneration = getAPositiveInt("Please enter a size for the initial generation:", 1);  //size of first generation.  Subsequent generations based on number of children
 
-        input = JOptionPane.showInputDialog("Please enter the maximum nuber of children that couples can have.\nPlease note that the size of families is an even distribution of all possible values.");
+        int maxNumberOfChildren = getAPositiveInt("Please enter the maximum nuber of children that couples can have.\nPlease note that the size of families is an even distribution of all possible values.", 0);  //max number of children each couple can have.  < 4 will likely drive population extinct
+        boolean valid = false;
+        boolean malariaPresent = false;
+        int parse = 0;
+        do {
 
-        int maxNumberOfChildren = Integer.parseInt(input);  //max number of children each couple can have.  < 4 will likely drive population extinct
+            input = JOptionPane.showInputDialog("Please enter Yes for Malaria, or No for none.");
 
-        input = JOptionPane.showInputDialog("Please enter Yes for Malaria, or No for none.");
+            //is malaria present
+            if (input.equalsIgnoreCase("yes") || input.equalsIgnoreCase("no") || input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n")) {
+                if(input.equalsIgnoreCase("yes") || input.equalsIgnoreCase("y")) {
+                    malariaPresent = true;
+                }
+                valid = true;
+            }
 
-        boolean malariaPresent;
+        }while(!valid);
 
-        //is malaria present
-        malariaPresent = input.equalsIgnoreCase("yes");
-
-        input = JOptionPane.showInputDialog("Please enter the chance of death from Sickle Cell for a Heterozygous carrier.\nPlease enter it as an integer.");
-
-        int parse = Integer.parseInt(input);
+        parse = getABoundedInt("Please enter the chance of death from Sickle Cell for a Heterozygous carrier.\nPlease enter it as an integer from 0 and 100.", 0, 100);
 
         chanceOfDeathFromSickleCell = (double)parse/(double)100;//chance that a heterozygous sickle carrier will die
 
-        input = JOptionPane.showInputDialog("Please enter the chance of each allele being a sickle cell allele.\nPLEASE NOTE: This only applies to the first generation.");
-
-        parse = Integer.parseInt(input);
+        parse = getABoundedInt("Please enter the chance of each allele being a sickle cell allele.\nPLEASE NOTE: This only applies to the first generation.", 0, 100);
 
         initialRateofSickleCell = (double)parse/(double)100;//rate of sickle cell in initial population.  On a per-allele basis
 
         if(malariaPresent) {
 
-            input = JOptionPane.showInputDialog("Please enter the chance for a Homozygous non-sickle cell individual to die from Malaria");
-
-            parse = Integer.parseInt(input);
+            parse = getABoundedInt("Please enter the chance for a Homozygous non-sickle cell individual to die from Malaria", 0, 100);
 
             chanceofDeathFromMalaria = (double) parse / (double) 100;//chance for a non-sickle to die from malaria.  Chance for hetere is .25 this rate
 
         }
 
-        input = JOptionPane.showInputDialog("Please enter the maximum number of generations for this simulation.\nNote that in large population simulations,\nrunning time may be very long.");
+        parse = getAPositiveInt("Please enter the maximum number of generations for this simulation.Note that in large population simulations,\nrunning time may be very long.", 0);
 
-        Generation[] generations = new Generation[Integer.parseInt(input)];  //how many generations to run for at most
+        Generation[] generations = new Generation[parse];  //how many generations to run for at most
 
-        double[] percentCarriers = new double[Integer.parseInt(input)];  //keep this equal to the previous lines number
+        double[] percentCarriers = new double[parse];  //keep this equal to the previous lines number
 
         generations[0] = new Generation(sizeOfInitialGeneration, malariaPresent);
 
@@ -105,15 +108,6 @@ class MultiGenerationalInheritance{
         if(selection == 1){
             System.exit(0);
         }
-
-        //System.out.println("Generation 1 has " + generations[0].getNumMales() + " Living males");
-
-        //System.out.println("Generation 1 has " + generations[0].getNumFemales() + " Living females");
-
-        //System.out.println("Generation 1 has " + generations[0].getTotalDeaths() + " Deaths, " + generations[0].getDeathsFromSickle()
-        // + " From sickle cell, and " + generations[0].getDeathsFromMalaria() + " From malaria");
-
-        //System.out.println("Generation 1 has " + 100 * percentCarriers[0] + " percent of population with sickle gene\n\n");
 
         for(int i = 1; i < generations.length; i++){
             generations[i] = new Generation(generations[i - 1], maxNumberOfChildren, malariaPresent);
@@ -154,15 +148,6 @@ class MultiGenerationalInheritance{
                 System.exit(0);
             }
 
-            //System.out.println("Generation " + (i + 1) + " has " + generations[i].getNumMales() + " Living males");
-
-            //System.out.println("Generation " + (i + 1) + " has " + generations[i].getNumFemales() + " Living females");
-
-            //System.out.println("Generation " + (i + 1) + " has " + generations[i].getTotalDeaths() + " Deaths, " + generations[i].getDeathsFromSickle()
-            //+ " From sickle cell, and " + generations[i].getDeathsFromMalaria() + " From malaria");
-
-            //System.out.println("Generation " + (i + 1) + " has " + 100 * percentCarriers[i] + " percent of population with sickle gene\n\n");
-
             if(generations[i].percentOfPopulationWithSickleGene() == 0 && !(generations[i].getNumMales() == 0 && generations[i].getNumFemales() == 0)){
 
                 JOptionPane.showMessageDialog(null, "The sickle cell gene has become extinct after " + (i + 1) + " generations.");
@@ -188,8 +173,6 @@ class MultiGenerationalInheritance{
                 }
 
                 System.exit(0);
-
-                //System.out.println("The sickle cell gene has become extinct after " + (i + 1) + " Generations");
 
                 break;
             }
@@ -238,7 +221,6 @@ class MultiGenerationalInheritance{
                 output.println(generationLog.elementAt(j));
                 output.println("\n");
             }
-            //output.println("The human race is extinct after " + (generations.length) + " generations");
             output.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -246,6 +228,80 @@ class MultiGenerationalInheritance{
 
         System.exit(0);
 
+    }
+
+    static void shutdownWithError(String message){
+        JOptionPane.showMessageDialog(null, message);
+        System.exit(0);
+    }
+
+    static int getAnInt(String message){
+        int choice = 0;
+        String input = "";
+        boolean valid = false;
+        do {
+
+            input = JOptionPane.showInputDialog(message);
+
+            try{
+                choice = Integer.parseInt(input);
+                valid = true;
+            }
+            catch (NumberFormatException ex){
+                JOptionPane.showMessageDialog(null, "Please choose a valid value");
+            }
+
+        }while(!valid);
+
+        return choice;
+    }
+
+    static int getABoundedInt(String message, int bottom, int top){
+        int choice = 0;
+        String input = "";
+        boolean valid = false;
+        do {
+
+            input = JOptionPane.showInputDialog(message);
+
+            try{
+                choice = Integer.parseInt(input);
+                valid = true;
+            }
+            catch (NumberFormatException ex){
+                JOptionPane.showMessageDialog(null, "Please choose a valid value");
+            }
+            if(choice < bottom || choice > top){
+                JOptionPane.showMessageDialog(null, "The number must be greater than or equal to " + bottom + " and less than or equal to " + top);
+            }
+
+        }while(!valid || choice < bottom || choice > top);
+
+        return choice;
+    }
+
+    static int getAPositiveInt(String message, int bottom){
+        int choice = 0;
+        String input = "";
+        boolean valid = false;
+        do {
+
+            input = JOptionPane.showInputDialog(message);
+
+            try{
+                choice = Integer.parseInt(input);
+                valid = true;
+            }
+            catch (NumberFormatException ex){
+                JOptionPane.showMessageDialog(null, "Please choose a valid value");
+            }
+            if(choice < bottom){
+                JOptionPane.showMessageDialog(null, "The number must be greater than or equal to " + bottom);
+            }
+
+        }while(!valid || choice < bottom);
+
+        return choice;
     }
 
 }
