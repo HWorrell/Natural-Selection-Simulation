@@ -36,6 +36,7 @@ class MultiGenerationalInheritance{
 
         String input;
 
+
         Vector<String> generationLog = new Vector<>();
 
         String fileName;
@@ -43,7 +44,7 @@ class MultiGenerationalInheritance{
         fileName = JOptionPane.showInputDialog("Please enter a file name for this run to be saved under.\nIt will be saved as <your_entry>.txt");
 
         if (fileName == null) {
-            shutdownWithError("There was an error in choosing a file name. The program will exit.");
+            shutdownWithError("There was an error in choosing a file name. The prvided file name, " + null + ", is invalid. The program will exit.");
         }
 
         int sizeOfInitialGeneration = getAPositiveInt("Please enter a size for the initial generation:", 1);  //size of first generation.  Subsequent generations based on number of children
@@ -51,7 +52,7 @@ class MultiGenerationalInheritance{
         int maxNumberOfChildren = getAPositiveInt("Please enter the maximum nuber of children that couples can have.\nPlease note that the size of families is an even distribution of all possible values.", 0);  //max number of children each couple can have.  < 4 will likely drive population extinct
         boolean valid = false;
         boolean malariaPresent = false;
-        int parse = 0;
+        int parse;
         do {
 
             input = JOptionPane.showInputDialog("Please enter Yes for Malaria, or No for none.");
@@ -126,24 +127,7 @@ class MultiGenerationalInheritance{
 
             if(selection == 1){
 
-                try {
-                    PrintWriter output = new PrintWriter(new File(fileName + ".txt"));
-
-                    output.println("Settings used:\n");
-                    output.println("Chance of sickle allele: " + initialRateofSickleCell);
-                    output.println("Chance of death for Homo-Nonsickle: " + chanceofDeathFromMalaria);
-                    output.println("Chance of death for sickle-cell heterozygous: " + chanceOfDeathFromSickleCell);
-                    output.println("\n");
-                    output.println("Generational Data:");
-
-                    for(int j = 0; j < generationLog.size(); j++){
-                        output.println(generationLog.elementAt(j));
-                        output.println("\n");
-                    }
-                    output.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                printToFile(fileName, generationLog);
 
                 System.exit(0);
             }
@@ -152,25 +136,9 @@ class MultiGenerationalInheritance{
 
                 JOptionPane.showMessageDialog(null, "The sickle cell gene has become extinct after " + (i + 1) + " generations.");
 
-                try {
-                    PrintWriter output = new PrintWriter(new File(fileName + ".txt"));
+                generationLog.add("The sickle cell gene has become extinct after " + (i + 1) + " generations.");
 
-                    output.println("Settings used:\n");
-                    output.println("Chance of sickle allele: " + initialRateofSickleCell);
-                    output.println("Chance of death for Homo-Nonsickle: " + chanceofDeathFromMalaria);
-                    output.println("Chance of death for sickle-cell heterozygous: " + chanceOfDeathFromSickleCell);
-                    output.println("\n");
-                    output.println("Generational Data:");
-
-                    for(int j = 0; j < generationLog.size(); j++){
-                        output.println(generationLog.elementAt(j));
-                        output.println("\n");
-                    }
-                    output.println("The sickle cell gene has become extinct after " + (i + 1) + " generations.");
-                    output.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                printToFile(fileName, generationLog);
 
                 System.exit(0);
 
@@ -180,25 +148,9 @@ class MultiGenerationalInheritance{
 
                 JOptionPane.showMessageDialog(null, "The human race is extinct after " + (i + 1) + " generations");
 
-                try {
-                    PrintWriter output = new PrintWriter(new File(fileName + ".txt"));
+                generationLog.add("The human race is extinct after " + (i + 1) + " generations");
 
-                    output.println("Settings used:\n");
-                    output.println("Chance of sickle allele: " + initialRateofSickleCell);
-                    output.println("Chance of death for Homo-Nonsickle: " + chanceofDeathFromMalaria);
-                    output.println("Chance of death for sickle-cell heterozygous: " + chanceOfDeathFromSickleCell);
-                    output.println("\n");
-                    output.println("Generational Data:");
-
-                    for(int j = 0; j < generationLog.size(); j++){
-                        output.println(generationLog.elementAt(j));
-                        output.println("\n");
-                    }
-                    output.println("The human race is extinct after " + (i + 1) + " generations");
-                    output.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                printToFile(fileName, generationLog);
 
                 System.exit(0);
 
@@ -207,58 +159,20 @@ class MultiGenerationalInheritance{
 
         }
 
-        try {
-            PrintWriter output = new PrintWriter(new File(fileName + ".txt"));
-
-            output.println("Settings used:\n");
-            output.println("Chance of sickle allele: " + initialRateofSickleCell);
-            output.println("Chance of death for Homo-Nonsickle: " + chanceofDeathFromMalaria);
-            output.println("Chance of death for sickle-cell heterozygous: " + chanceOfDeathFromSickleCell);
-            output.println("\n");
-            output.println("Generational Data:");
-
-            for(int j = 0; j < generationLog.size(); j++){
-                output.println(generationLog.elementAt(j));
-                output.println("\n");
-            }
-            output.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        printToFile(fileName, generationLog);
 
         System.exit(0);
 
     }
 
-    static void shutdownWithError(String message){
+    private static void shutdownWithError(String message){
         JOptionPane.showMessageDialog(null, message);
         System.exit(0);
     }
 
-    static int getAnInt(String message){
+    private static int getABoundedInt(String message, int bottom, int top){
         int choice = 0;
-        String input = "";
-        boolean valid = false;
-        do {
-
-            input = JOptionPane.showInputDialog(message);
-
-            try{
-                choice = Integer.parseInt(input);
-                valid = true;
-            }
-            catch (NumberFormatException ex){
-                JOptionPane.showMessageDialog(null, "Please choose a valid value");
-            }
-
-        }while(!valid);
-
-        return choice;
-    }
-
-    static int getABoundedInt(String message, int bottom, int top){
-        int choice = 0;
-        String input = "";
+        String input;
         boolean valid = false;
         do {
 
@@ -280,9 +194,9 @@ class MultiGenerationalInheritance{
         return choice;
     }
 
-    static int getAPositiveInt(String message, int bottom){
+    private static int getAPositiveInt(String message, int bottom){
         int choice = 0;
-        String input = "";
+        String input;
         boolean valid = false;
         do {
 
@@ -302,6 +216,27 @@ class MultiGenerationalInheritance{
         }while(!valid || choice < bottom);
 
         return choice;
+    }
+
+    private static void printToFile(String fileName, Vector<String> generationLog){
+        try {
+            PrintWriter output = new PrintWriter(new File(fileName + ".txt"));
+
+            output.println("Settings used:\n");
+            output.println("Chance of sickle allele: " + initialRateofSickleCell);
+            output.println("Chance of death for Homo-Nonsickle: " + chanceofDeathFromMalaria);
+            output.println("Chance of death for sickle-cell heterozygous: " + chanceOfDeathFromSickleCell);
+            output.println("\n");
+            output.println("Generational Data:");
+
+            for(int j = 0; j < generationLog.size(); j++){
+                output.println(generationLog.elementAt(j));
+                output.println("\n");
+            }
+            output.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 }

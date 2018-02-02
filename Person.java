@@ -58,7 +58,7 @@ class Person{
             this.diedfrommalaria = false;
         }
     }
-    
+
 
     Person(Person f, Person m){
         Random rand = new Random();
@@ -142,12 +142,7 @@ class Person{
     }
 
     boolean sickleCarrier(){
-        if(this.alleleOne.equalsIgnoreCase("S") || this.alleleTwo.equalsIgnoreCase("S")){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return this.alleleOne.equalsIgnoreCase("S") || this.alleleTwo.equalsIgnoreCase("S");
     }
 
     boolean getDiedFromSickle(){
