@@ -53,11 +53,11 @@ class Generation {
         }
         int index = 0;
         while(females.size() < numCouples || males.size() < numCouples){
-            if(prev.population.elementAt(index).isAlive() && prev.population.elementAt(index).isFemale()){
+            if(prev.population.elementAt(index).isAlive() && prev.population.elementAt(index).isFemale() && females.size() < numCouples){
                 females.push(prev.population.elementAt(index));
                 prev.population.remove(index);
             }
-			else if(prev.population.elementAt(index).isAlive() && prev.population.elementAt(index).isMale()){
+			else if(prev.population.elementAt(index).isAlive() && prev.population.elementAt(index).isMale() && males.size() < numCouples){
                 males.push(prev.population.elementAt(index));
                 prev.population.remove(index);
             }
