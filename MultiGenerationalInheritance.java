@@ -34,13 +34,17 @@ class MultiGenerationalInheritance{
     static double chanceofDeathFromMalaria;
     public static void main(String[] args) {
 
+        //variables
         String input;
-
-
+        String fileName;
+        int parse;
+        int numGenerationsToRun;
+        boolean valid = false;
+        boolean malariaPresent = false;
+        int selection;
         Vector<String> generationLog = new Vector<>();
 
-        String fileName;
-
+        //setup
         fileName = JOptionPane.showInputDialog("Please enter a file name for this run to be saved under.\nIt will be saved as <your_entry>.txt");
 
         if (fileName == null) {
@@ -50,9 +54,7 @@ class MultiGenerationalInheritance{
         int sizeOfInitialGeneration = getAPositiveInt("Please enter a size for the initial generation:", 1);  //size of first generation.  Subsequent generations based on number of children
 
         int maxNumberOfChildren = getAPositiveInt("Please enter the maximum nuber of children that couples can have.\nPlease note that the size of families is an even distribution of all possible values.", 0);  //max number of children each couple can have.  < 4 will likely drive population extinct
-        boolean valid = false;
-        boolean malariaPresent = false;
-        int parse;
+
         do {
 
             input = JOptionPane.showInputDialog("Please enter Yes for Malaria, or No for none.");
@@ -83,19 +85,23 @@ class MultiGenerationalInheritance{
 
         }
 
-        parse = getAPositiveInt("Please enter the maximum number of generations for this simulation.Note that in large population simulations,\nrunning time may be very long.", 0);
+        numGenerationsToRun = parse = getAPositiveInt("Please enter the maximum number of generations for this simulation.Note that in large population simulations,\nrunning time may be very long.", 0);
 
         Generation[] generations = new Generation[parse];  //how many generations to run for at most
 
         double[] percentCarriers = new double[parse];  //keep this equal to the previous lines number
 
+        //end setup
+
+        //begin simulation
+
         generations[0] = new Generation(sizeOfInitialGeneration, malariaPresent);
 
         percentCarriers[0] = generations[0].percentOfPopulationWithSickleGene();
 
-        Object[] options = { "Continue", "Exit" };
+        Object[] opt = {"Show each Step", "Autorun"};
 
-        int selection;
+        Object[] options = { "Continue", "Exit" };
 
         generationLog.add("Generation 1 has " + generations[0].getNumMales() + " Living males\n" +
                 "Generation 1 has " + generations[0].getNumFemales() + " Living females\n" +
@@ -103,10 +109,10 @@ class MultiGenerationalInheritance{
                 " From sickle cell, and " + generations[0].getDeathsFromMalaria() + " From malaria\n" +
                 "Generation 1 has " + 100 * percentCarriers[0] + " percent of population with sickle gene");
 
-        selection = JOptionPane.showOptionDialog(null,generationLog.elementAt(0), "Result",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+            selection = JOptionPane.showOptionDialog(null, generationLog.elementAt(0), "Result",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
-        if(selection == 1){
+        if (selection == 1) {
             System.exit(0);
         }
 
@@ -122,17 +128,22 @@ class MultiGenerationalInheritance{
                     " From sickle cell, and " + generations[i].getDeathsFromMalaria() + " From malaria\n" +
                     "Generation " + (i + 1) + " has " + 100 * percentCarriers[i] + " percent of population with sickle gene");
 
-            selection = JOptionPane.showOptionDialog(null,generationLog.elementAt(i), "Result",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
-            if(selection == 1){
+                selection = JOptionPane.showOptionDialog(null, generationLog.elementAt(i), "Result",
+                        JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+            if (selection == 1) {
+
+                generationLog.add("Simulation was ended manually by user");
 
                 printToFile(fileName, generationLog);
 
                 System.exit(0);
             }
 
+
             if(generations[i].percentOfPopulationWithSickleGene() == 0 && !(generations[i].getNumMales() == 0 && generations[i].getNumFemales() == 0)){
+
 
                 JOptionPane.showMessageDialog(null, "The sickle cell gene has become extinct after " + (i + 1) + " generations.");
 
@@ -146,6 +157,7 @@ class MultiGenerationalInheritance{
             }
             else if(generations[i].getNumMales() == 0 && generations[i].getNumFemales() == 0){
 
+
                 JOptionPane.showMessageDialog(null, "The human race is extinct after " + (i + 1) + " generations");
 
                 generationLog.add("The human race is extinct after " + (i + 1) + " generations");
@@ -158,6 +170,8 @@ class MultiGenerationalInheritance{
             }
 
         }
+
+        generationLog.add("Simulation has ended after " + numGenerationsToRun);
 
         printToFile(fileName, generationLog);
 
