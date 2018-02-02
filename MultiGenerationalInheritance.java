@@ -163,7 +163,7 @@ class MultiGenerationalInheritance{
 
             //System.out.println("Generation " + (i + 1) + " has " + 100 * percentCarriers[i] + " percent of population with sickle gene\n\n");
 
-            if(generations[i].percentOfPopulationWithSickleGene() == 0){
+            if(generations[i].percentOfPopulationWithSickleGene() == 0 && !(generations[i].getNumMales() == 0 && generations[i].getNumFemales() == 0)){
 
                 JOptionPane.showMessageDialog(null, "The sickle cell gene has become extinct after " + (i + 1) + " generations.");
 
@@ -193,7 +193,7 @@ class MultiGenerationalInheritance{
 
                 break;
             }
-            if(generations[i].getNumMales() == 0 && generations[i].getNumFemales() == 0){
+            else if(generations[i].getNumMales() == 0 && generations[i].getNumFemales() == 0){
 
                 JOptionPane.showMessageDialog(null, "The human race is extinct after " + (i + 1) + " generations");
 
@@ -219,7 +219,6 @@ class MultiGenerationalInheritance{
 
                 System.exit(0);
 
-                //System.out.println("The human race is extinct after " + (i + 1) + " generations");
                 break;
             }
 

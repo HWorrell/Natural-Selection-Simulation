@@ -157,7 +157,12 @@ class Generation {
             }
         }
 
-        return ((double)hasSickle/(double)live);
+		if(live != 0){
+			return ((double)hasSickle/(double)live);
+		}
+		else{
+			return 0;
+		}
     }
 
     int getTotalPopulation(){
