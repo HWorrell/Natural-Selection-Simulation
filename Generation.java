@@ -36,7 +36,7 @@ class Generation {
         int numMales = prev.getNumMales();
 
         int numFemales = prev.getNumFemales();
-        
+
         Collections.shuffle(prev.population);
 
 
@@ -55,7 +55,7 @@ class Generation {
 			else if(prev.population.elementAt(index).isAlive() && prev.population.elementAt(index).isMale() && males.size() < numCouples){
                 males.push(prev.population.elementAt(index));
                 prev.population.remove(index);
-            }
+			}
             else{
                 index++;
             }
@@ -158,5 +158,9 @@ class Generation {
         }
 
         return ((double)hasSickle/(double)live);
+    }
+
+    int getTotalPopulation(){
+        return this.population.size();
     }
 }
